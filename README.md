@@ -17,3 +17,4 @@ sudo python setup.py install
 ```
 gpxseg -c -s ~/Dropbox/ -t ~/gpxarchive
 ```
+*This  command will copy all .gpx files within ~/Dropbox/ folder recursively into ~/gpxarchive.*
