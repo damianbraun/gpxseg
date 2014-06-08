@@ -12,7 +12,7 @@ python setup.py install
 sudo python setup.py install
 ```
 
-## Usage
+### Usage
 
 ```
 gpxseg -c -s ~/Dropbox/ -t ~/gpxarchive
