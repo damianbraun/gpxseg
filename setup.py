@@ -5,7 +5,7 @@ setup(
         version='0.1',
         author='Damian Braun',
         author_email='brunek5252@gmail.com',
-        packages=[],
+        packages=['nominatim'],
         py_modules=['gpxseg'],
         entry_points={
             'console_scripts': ['gpxseg=gpxseg:main']
