@@ -7,6 +7,7 @@ CLI Tool for auto renaming gpx files
 
 ```
 git clone https://github.com/damianbraun/gpxseg.git
+cd gpxseg
 python setup.py install
 (or)
 sudo python setup.py install
