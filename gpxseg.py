@@ -39,7 +39,6 @@ def find_files_in_folder(folderpaths=watchpaths,
     are stored in folders from first argument.
     Both arguments should be lists.
     """
-    files_list = []
     for x in folderpaths:
         x = os.path.expanduser(x)
         for root, dirs, files in os.walk(x):
@@ -51,8 +50,8 @@ def find_files_in_folder(folderpaths=watchpaths,
                         end of file name is matching, TODO: i can try using
                         endswith method of str
                         """
-                        files_list.append(os.path.join(root, file))
-    return files_list
+                        yield os.path.join(root, file)
+
 
 class Coordinate(object):
     """docstring for Coordinate"""
