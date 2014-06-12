@@ -17,7 +17,6 @@ from __future__ import print_function
 from docopt import docopt
 args = docopt(__doc__)
 
-from pprint import pprint
 from xml.dom import minidom
 import datetime
 import logging
@@ -31,6 +30,7 @@ logger = logging.getLogger()
 watchpaths = []
 watchpaths.append(args['<source_folder>'])
 targetpath = args['<target_folder>']
+
 
 def find_files_in_folder(folderpaths=watchpaths,
                          extentions=['gpx']):
@@ -73,27 +73,27 @@ dt: %s''' % (self.lat, self.lon, self.dt)
 
         nomrev = NominatimReverse()
         self.osm = nomrev.query(self.lat, self.lon)
-        
+
         adr = self.osm['address']
 
-        if not 'road' in adr:
+        if 'road' not in adr:
             adr[u'road'] = u''
-        if not 'path' in adr:
+        if 'path' not in adr:
             adr[u'path'] = u''
 
-        if not 'house_number' in adr:
+        if 'house_number' not in adr:
             adr[u'house_number'] = u''
 
-        if not 'city_district' in adr:
+        if 'city_district' not in adr:
             adr[u'city_district'] = u''
-        if not 'suburb' in adr:
+        if 'suburb' not in adr:
             adr[u'suburb'] = u''
 
-        if not 'city' in adr:
+        if 'city' not in adr:
             adr[u'city'] = u''
-        if not 'town' in adr:
+        if 'town' not in adr:
             adr[u'town'] = u''
-        if not 'village' in adr:
+        if 'village' not in adr:
             adr[u'village'] = u''
 
         if adr['house_number'] and adr['road']:
@@ -131,7 +131,7 @@ class Gpx(object):
         for item in trkptlist:
             if sys.version_info.major == 3:
                 time = str(item.getElementsByTagName('time')[0].firstChild.data.encode('utf-8'), encoding='utf-8')
-            else: 
+            else:
                 time = str(item.getElementsByTagName('time')[0].firstChild.data.encode('utf-8'))
             try:
                 dt = datetime.datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -157,11 +157,11 @@ class Gpx(object):
                     return str(x)
         first = self.ITEMS[0]
         first.fetchaddress()
-        last = self.ITEMS[-1]
         self.newname = '%s-%s-%s %s.%s %s' % (first.dt.year,
-        z(first.dt.month), z(first.dt.day), z(first.dt.hour),
-                z(first.dt.minute), first.shortaddress)
-        self.newname = self.newname.replace('/','.')
+            z(first.dt.month), z(first.dt.day), z(first.dt.hour),
+            z(first.dt.minute), first.shortaddress
+        )
+        self.newname = self.newname.replace('/', '.')
 
     def copyfile(self):
         """docstring for copyfile"""
@@ -181,9 +181,9 @@ class Gpx(object):
             shutil.move(self.filepath, target)
             print('%s\nmoved to\n%s' % (self.filepath, target))
 
+
 def main():
-    fileslist = find_files_in_folder()
-    for f in fileslist:
+    for f in find_files_in_folder():
         gpx = Gpx(f)
         gpx.load()
         gpx.namegen()
