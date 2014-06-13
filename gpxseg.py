@@ -2,6 +2,8 @@
 """gpxseg
 
 Usage:
+    gpxseg -c <source_folder> <target_folder>
+    gpxseg -m <source_folder> <target_folder>
     gpxseg -c -s <source_folder> -t <target_folder>
     gpxseg -m -s <source_folder> -t <target_folder>
 
