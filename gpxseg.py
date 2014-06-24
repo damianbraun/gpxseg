@@ -33,6 +33,10 @@ watchpaths = []
 watchpaths.append(args['<source_folder>'])
 targetpath = args['<target_folder>']
 
+if not os.path.isdir(args['<source_folder>']) or not os.path.isdir(args['<target_folder>']):
+    print('One of paths is not a folder,\nplease specify folder paths')
+    sys.exit(2)
+
 
 def find_files_in_folder(folderpaths=watchpaths,
                          extentions=['gpx']):
