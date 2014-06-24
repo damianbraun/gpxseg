@@ -59,7 +59,7 @@ def find_files_in_folder(folderpaths=watchpaths,
                         yield os.path.join(root, file)
 
 
-class Coordinate(object):
+class Coordinate():
     """docstring for Coordinate"""
     def __init__(self, lat, lon, dt):
         self.lat, self.lon = lat, lon
@@ -124,7 +124,7 @@ dt: %s''' % (self.lat, self.lon, self.dt)
         self.shortaddress = sn.strip()
 
 
-class Gpx(object):
+class Gpx():
     """docstring for Gpx"""
     def __init__(self, filepath):
         self.filepath = str(filepath)
