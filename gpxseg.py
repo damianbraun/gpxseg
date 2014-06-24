@@ -53,7 +53,7 @@ def find_files_in_folder(folderpaths=watchpaths,
                         yield os.path.join(root, file)
 
 
-class Coordinate(object):
+class Coordinate():
     """docstring for Coordinate"""
     def __init__(self, lat, lon, dt):
         self.lat, self.lon = lat, lon
@@ -118,11 +118,14 @@ dt: %s''' % (self.lat, self.lon, self.dt)
         self.shortaddress = sn.strip()
 
 
-class Gpx(object):
-    """docstring for Gpx"""
+class File():
+    """docstring for File"""
     def __init__(self, filepath):
-        self.filepath = str(filepath)
+        self.filepath = filepath
 
+
+class Gpx(File):
+    """docstring for Gpx"""
     def load(self):
         """docstring for load"""
         self.DOMTree = minidom.parse(self.filepath)
