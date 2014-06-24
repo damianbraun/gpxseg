@@ -124,11 +124,14 @@ dt: %s''' % (self.lat, self.lon, self.dt)
         self.shortaddress = sn.strip()
 
 
-class Gpx():
-    """docstring for Gpx"""
+class File():
+    """docstring for File"""
     def __init__(self, filepath):
-        self.filepath = str(filepath)
+        self.filepath = filepath
 
+
+class Gpx(File):
+    """docstring for Gpx"""
     def load(self):
         """docstring for load"""
         self.DOMTree = minidom.parse(self.filepath)
