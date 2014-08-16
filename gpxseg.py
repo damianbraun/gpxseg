@@ -25,6 +25,8 @@ import logging
 import os
 import shutil
 import sys
+import tzlocal
+import pytz
 
 from nominatim import NominatimReverse
 
@@ -64,6 +66,10 @@ class Coordinate():
     def __init__(self, lat, lon, dt):
         self.lat, self.lon = lat, lon
         self.dt = dt
+        utc = pytz.utc
+        self.dt = utc.localize(self.dt)
+        localtimezone = tzlocal.get_localzone()
+        self.dt = self.dt.astimezone(localtimezone)
         self.address = ''
 
     def __repr__(self):

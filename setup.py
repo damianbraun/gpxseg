@@ -11,7 +11,9 @@ setup(
         },
     install_requires=[
         'docopt',
-        'nominatim'
+        'nominatim',
+        'pytz',
+        'tzlocal'
         ],
     classifiers=[
         'Programming Language :: Python :: 2',
