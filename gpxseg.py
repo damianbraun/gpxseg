@@ -186,7 +186,9 @@ class Gpx(File):
             target = target.encode('utf-8', 'ignore')
         if self.newname:
             shutil.copyfile(self.filepath, target)
-            print('%s\ncopied to\n%s' % (self.filepath, target))
+            print('%s\ncopied to\n%s' %
+                  (self.filepath.replace(os.environ['HOME'], '~'),
+                   target.replace(os.environ['HOME'], '~')))
 
     def movefile(self):
         """docstring for movefile"""
@@ -195,7 +197,9 @@ class Gpx(File):
             target = target.encode('utf-8', 'ignore')
         if self.newname:
             shutil.move(self.filepath, target)
-            print('%s\nmoved to\n%s' % (self.filepath, target))
+            print('%s\nmoved to\n%s' %
+                  (self.filepath.replace(os.environ['HOME'], '~'),
+                   target.replace(os.environ['HOME'], '~')))
 
 
 def main():
