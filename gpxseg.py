@@ -36,7 +36,8 @@ watchpaths = []
 watchpaths.append(args['<source_folder>'])
 targetpath = args['<target_folder>']
 
-if not os.path.isdir(args['<source_folder>']) or not os.path.isdir(args['<target_folder>']):
+if (not os.path.isdir(args['<source_folder>']) or
+   not os.path.isdir(args['<target_folder>'])):
     print('One of paths is not a folder,\nplease specify folder paths')
     sys.exit(2)
 
@@ -110,7 +111,8 @@ dt: %s''' % (self.lat, self.lon, self.dt)
             adr[u'village'] = u''
 
         if adr['house_number'] and adr['road']:
-            adr[u'road_house_number'] = adr['road'] + u' ' + adr['house_number'] + u', '
+            adr[u'road_house_number'] = adr['road'] + u' '
+            + adr['house_number'] + u', '
         elif adr['road']:
             adr[u'road_house_number'] = adr['road'] + u', '
         elif adr['path']:
@@ -174,14 +176,17 @@ class Gpx(File):
         first = self.ITEMS[0]
         first.fetchaddress()
         self.newname = '%s-%s-%s %s.%s %s' % (first.dt.year,
-            z(first.dt.month), z(first.dt.day), z(first.dt.hour),
-            z(first.dt.minute), first.shortaddress
-        )
+                                              z(first.dt.month),
+                                              z(first.dt.day),
+                                              z(first.dt.hour),
+                                              z(first.dt.minute),
+                                              first.shortaddress)
         self.newname = self.newname.replace('/', '.')
 
     def copyfile(self):
         """docstring for copyfile"""
-        target = os.path.join(os.path.expanduser(targetpath), self.newname + '.gpx')
+        target = os.path.join(os.path.expanduser(targetpath),
+                              self.newname + '.gpx')
         if sys.version_info.major == 2:
             target = target.encode('utf-8', 'ignore')
         if self.newname:
@@ -192,7 +197,8 @@ class Gpx(File):
 
     def movefile(self):
         """docstring for movefile"""
-        target = os.path.join(os.path.expanduser(targetpath), self.newname + '.gpx')
+        target = os.path.join(os.path.expanduser(targetpath),
+                              self.newname + '.gpx')
         if sys.version_info.major == 2:
             target = target.encode('utf-8', 'ignore')
         if self.newname:
