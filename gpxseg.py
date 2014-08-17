@@ -20,6 +20,7 @@ from docopt import docopt
 args = docopt(__doc__)
 
 from xml.dom import minidom
+from colorama import Fore
 import datetime
 import logging
 import os
@@ -198,15 +199,21 @@ class Gpx(File):
 
 
 def main():
+    colors = [Fore.BLUE, Fore.GREEN, Fore.RED, Fore.YELLOW]
+    num = 0
     for f in find_files_in_folder():
         gpx = Gpx(f)
         gpx.load()
         gpx.namegen()
+        print(colors[num])
         if args['-c']:
             gpx.copyfile()
         if args['-m']:
             gpx.movefile()
-        print('')
+        if num >= len(colors)-1:
+            num = 0
+        else:
+            num += 1
 
 if __name__ == '__main__':
     main()
