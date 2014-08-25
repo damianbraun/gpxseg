@@ -2,10 +2,13 @@
 """gpxseg
 
 Usage:
+    gpxseg -c
+    gpxseg -m
     gpxseg -c <source_folder> <target_folder>
     gpxseg -m <source_folder> <target_folder>
     gpxseg -c -s <source_folder> -t <target_folder>
     gpxseg -m -s <source_folder> -t <target_folder>
+    gpxseg settings
 
 Options:
     -h --help       Show this screen.
@@ -14,6 +17,7 @@ Options:
     -m              Move mode.
     -s --source     Set source folder.
     -t --target     Set target folder.
+    settings        Create settings file in ~/.gpxseg
 """
 from __future__ import print_function
 from docopt import docopt
@@ -28,18 +32,14 @@ import shutil
 import sys
 import tzlocal
 import pytz
+import pickle
 
 from nominatim import NominatimReverse
 
 logger = logging.getLogger()
 watchpaths = []
 watchpaths.append(args['<source_folder>'])
-targetpath = args['<target_folder>']
 
-if (not os.path.isdir(args['<source_folder>']) or
-   not os.path.isdir(args['<target_folder>'])):
-    print('One of paths is not a folder,\nplease specify folder paths')
-    sys.exit(2)
 
 
 def find_files_in_folder(folderpaths=watchpaths,
@@ -111,8 +111,8 @@ dt: %s''' % (self.lat, self.lon, self.dt)
             adr[u'village'] = u''
 
         if adr['house_number'] and adr['road']:
-            adr[u'road_house_number'] = adr['road'] + u' '
-            + adr['house_number'] + u', '
+            adr[u'road_house_number'] = (adr['road'] + u' '
+                                         + adr['house_number'] + u', ')
         elif adr['road']:
             adr[u'road_house_number'] = adr['road'] + u', '
         elif adr['path']:
@@ -136,7 +136,7 @@ dt: %s''' % (self.lat, self.lon, self.dt)
 class File():
     """docstring for File"""
     def __init__(self, filepath):
-        self.filepath = filepath
+        self.filepath = os.path.expanduser(filepath)
 
 
 class Gpx(File):
@@ -185,7 +185,7 @@ class Gpx(File):
 
     def copyfile(self):
         """docstring for copyfile"""
-        target = os.path.join(os.path.expanduser(targetpath),
+        target = os.path.join(os.path.expanduser(args['<target_folder>']),
                               self.newname + '.gpx')
         if sys.version_info.major == 2:
             target = target.encode('utf-8', 'ignore')
@@ -197,7 +197,7 @@ class Gpx(File):
 
     def movefile(self):
         """docstring for movefile"""
-        target = os.path.join(os.path.expanduser(targetpath),
+        target = os.path.join(os.path.expanduser(args['<target_folder>']),
                               self.newname + '.gpx')
         if sys.version_info.major == 2:
             target = target.encode('utf-8', 'ignore')
@@ -208,10 +208,44 @@ class Gpx(File):
                    target.replace(os.environ['HOME'], '~')))
 
 
+class Settings(File):
+    """Class for managing settings file."""
+    def load(self):
+        file = open(self.filepath, 'rb')
+        object = pickle.load(file)
+        file.close()
+        return object
+
+    def dump(self, object):
+        try:
+            file = open(self.filepath, 'wb')
+            pickle.dump(object, file)
+            file.close()
+        except IOError:
+            file = open(self.filepath, 'w+')
+            file.close()
+            self.dump(object)
+
+    def create(self):
+        source = os.path.expanduser(raw_input('Type in source path:'))
+        target = os.path.expanduser(raw_input('Type in target path:'))
+        self.dump((source, target))
+
+
 def main():
+    settings = Settings('~/.gpxseg.pkl')
+    if args['settings']:
+        settings.create()
+        sys.exit(1)
+    else:
+        obj = settings.load()
+        args['<source_folder>'], args['<target_folder>'] = obj
+    if (not os.path.isdir(args['<source_folder>']) or not os.path.isdir(args['<target_folder>'])):
+        print('One of paths is not a folder,\nplease specify folder paths')
+        sys.exit(2)
     colors = [Fore.BLUE, Fore.GREEN, Fore.RED, Fore.YELLOW]
     num = 0
-    for f in find_files_in_folder():
+    for f in find_files_in_folder([args['<source_folder>']]):
         gpx = Gpx(f)
         gpx.load()
         gpx.namegen()
