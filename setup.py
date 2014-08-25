@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='gpxseg',
-    version='0.1',
+    version='0.2',
     author='Damian Braun',
     author_email='brunek5252@gmail.com',
     py_modules=['gpxseg'],
