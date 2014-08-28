@@ -41,7 +41,6 @@ watchpaths = []
 watchpaths.append(args['<source_folder>'])
 
 
-
 def find_files_in_folder(folderpaths=watchpaths,
                          extentions=['gpx']):
     """
@@ -64,7 +63,9 @@ def find_files_in_folder(folderpaths=watchpaths,
 
 
 class Coordinate():
-    """docstring for Coordinate"""
+    """
+    Class for storing pair of lat and lon, time and additional info.
+    """
     def __init__(self, lat, lon, dt):
         self.lat, self.lon = lat, lon
         self.dt = dt
@@ -83,8 +84,10 @@ address:%s''' % (self.lat, self.lon, self.dt, self.address)
 dt: %s''' % (self.lat, self.lon, self.dt)
 
     def fetchaddress(self):
-        """docstring for fetchaddress"""
-
+        """
+        Method for fetching address from Nominatim, and formating it in
+        shortaddress.
+        """
         nomrev = NominatimReverse()
         self.osm = nomrev.query(self.lat, self.lon)
 
@@ -134,15 +137,21 @@ dt: %s''' % (self.lat, self.lon, self.dt)
 
 
 class File():
-    """docstring for File"""
+    """
+    Base class for files.
+    """
     def __init__(self, filepath):
         self.filepath = os.path.expanduser(filepath)
 
 
 class Gpx(File):
-    """docstring for Gpx"""
+    """
+    Class for whole gpx file.
+    """
     def load(self):
-        """docstring for load"""
+        """
+        Method for loading all trkpt items from xml to self.ITEMS
+        """
         self.DOMTree = minidom.parse(self.filepath)
         trkptlist = self.DOMTree.getElementsByTagName('trkpt')
         self.ITEMS = []
@@ -161,7 +170,9 @@ class Gpx(File):
             self.ITEMS.append(coordinate)
 
     def namegen(self):
-        """docstring for namegen"""
+        """
+        Method for generating newname for file.
+        """
         def z(x):
             if type(x) == 'str':
                 if int(x) < 10:
@@ -184,7 +195,9 @@ class Gpx(File):
         self.newname = self.newname.replace('/', '.')
 
     def copyfile(self):
-        """docstring for copyfile"""
+        """
+        Method for copying file.
+        """
         target = os.path.join(os.path.expanduser(args['<target_folder>']),
                               self.newname + '.gpx')
         if sys.version_info.major == 2:
@@ -196,7 +209,9 @@ class Gpx(File):
                    target.replace(os.environ['HOME'], '~')))
 
     def movefile(self):
-        """docstring for movefile"""
+        """
+        Method for moving file.
+        """
         target = os.path.join(os.path.expanduser(args['<target_folder>']),
                               self.newname + '.gpx')
         if sys.version_info.major == 2:
@@ -209,7 +224,9 @@ class Gpx(File):
 
 
 class Settings(File):
-    """Class for managing settings file."""
+    """
+    Class for managing settings file.
+    """
     def load(self):
         file = open(self.filepath, 'rb')
         object = pickle.load(file)
